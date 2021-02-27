@@ -7,7 +7,7 @@
 
 #if ENTRY_CONFIG_USE_SDL
 
-#if BX_PLATFORM_LINUX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #elif BX_PLATFORM_WINDOWS
 #	define SDL_MAIN_HANDLED
 #endif
@@ -45,7 +45,7 @@ namespace entry
 			return NULL;
 		}
 
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 			if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 				return (void*)wmi.info.wl.surface;
@@ -1062,7 +1062,7 @@ namespace entry
 		{
 			return NULL;
 		}
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 			if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 				return wmi.info.wl.display;
@@ -1082,7 +1082,7 @@ namespace entry
 		{
 			return bgfx::NativeWindowHandleType::Default;
 		}
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 		if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 		{

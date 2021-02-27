@@ -4,11 +4,15 @@
 #
 
 UNAME := $(shell uname)
-ifeq ($(UNAME),$(filter $(UNAME),Linux Darwin))
+ifeq ($(UNAME),$(filter $(UNAME),Linux Darwin FreeBSD GNU/kFreeBSD))
 ifeq ($(UNAME),$(filter $(UNAME),Darwin))
 OS=darwin
 else
+ifeq ($(UNAME),$(filter $(UNAME),FreeBSD GNU/kFreeBSD))
+OS=bsd
+else
 OS=linux
+endif
 endif
 
 help:
@@ -43,6 +47,7 @@ projgen: ## Generate project files for all configurations.
 	$(GENIE) --with-tools --with-combined-examples --with-shared-lib --gcc=osx-arm64       gmake
 	$(GENIE) --with-tools --with-combined-examples --with-shared-lib --xcode=osx           xcode9
 	$(GENIE) --with-tools --with-combined-examples --with-shared-lib --xcode=ios           xcode9
+	$(GENIE)              --with-combined-examples --with-shared-lib --gcc=freebsd         gmake
 	$(GENIE)              --with-combined-examples --with-shared-lib --gcc=android-arm     gmake
 	$(GENIE)              --with-combined-examples --with-shared-lib --gcc=android-arm64   gmake
 	$(GENIE)              --with-combined-examples --with-shared-lib --gcc=android-x86     gmake
@@ -102,6 +107,18 @@ linux-debug64: .build/projects/gmake-linux ## Build - Linux x64 Debug
 linux-release64: .build/projects/gmake-linux ## Build - Linux x64 Release
 	$(MAKE) -R -C .build/projects/gmake-linux config=release64
 linux: linux-debug64 linux-release64 ## Build - Linux x86/x64 Debug and Release
+
+.build/projects/gmake-freebsd:
+	$(GENIE) --with-tools --with-combined-examples --with-shared-lib --gcc=freebsd gmake
+freebsd-debug32: .build/projects/gmake-freebsd ## Build - FreeBSD x86 Debug
+	$(MAKE) -R -C .build/projects/gmake-freebsd config=debug32
+freebsd-release32: .build/projects/gmake-freebsd ## Build - FreeBSD x86 Release
+	$(MAKE) -R -C .build/projects/gmake-freebsd config=release32
+freebsd-debug64: .build/projects/gmake-freebsd ## Build - FreeBSD x86 Debug
+	$(MAKE) -R -C .build/projects/gmake-freebsd config=debug64
+freebsd-release64: .build/projects/gmake-freebsd ## Build - FreeBSD x86 Release
+	$(MAKE) -R -C .build/projects/gmake-freebsd config=release64
+freebsd: freebsd-debug32 freebsd-release32 freebsd-debug64 freebsd-release64 ## Build - FreeBSD x86/x64 Debug and Release
 
 .build/projects/gmake-mingw-gcc:
 	$(GENIE) --with-tools --with-combined-examples --with-shared-lib --os=windows --gcc=mingw-gcc gmake
@@ -211,12 +228,20 @@ docs:
 SILENT ?= @
 
 UNAME := $(shell uname)
-ifeq ($(UNAME),$(filter $(UNAME),Linux Darwin))
+ifeq ($(UNAME),$(filter $(UNAME),Linux Darwin FreeBSD GNU/kFreeBSD))
 ifeq ($(UNAME),$(filter $(UNAME),Darwin))
 OS=darwin
 BUILD_PROJECT_DIR=gmake-osx-x64
 BUILD_OUTPUT_DIR=osx-x64
 BUILD_TOOLS_CONFIG=release
+BUILD_TOOLS_SUFFIX=Release
+EXE=
+else
+ifeq ($(UNAME),$(filter $(UNAME),FreeBSD GNU/kFreeBSD))
+OS=bsd
+BUILD_PROJECT_DIR=gmake-freebsd
+BUILD_OUTPUT_DIR=freebsd64_gcc
+BUILD_TOOLS_CONFIG=release64
 BUILD_TOOLS_SUFFIX=Release
 EXE=
 else
@@ -226,6 +251,7 @@ BUILD_OUTPUT_DIR=linux64_gcc
 BUILD_TOOLS_CONFIG=release64
 BUILD_TOOLS_SUFFIX=Release
 EXE=
+endif
 endif
 else
 OS=windows
