@@ -124,7 +124,7 @@ bool openFileSelectionDialog(
 	, const bx::StringView& _filter
 	)
 {
-#if BX_PLATFORM_LINUX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 	char tmp[4096];
 	bx::StaticMemoryBlockWriter writer(tmp, sizeof(tmp) );
 

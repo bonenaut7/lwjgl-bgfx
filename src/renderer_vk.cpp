@@ -6783,7 +6783,7 @@ VK_DESTROY
 				result = vkCreateAndroidSurfaceKHR(instance, &sci, allocatorCb, &m_surface);
 			}
 		}
-#elif BX_PLATFORM_LINUX
+#elif BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 		{
 #if     defined(WL_EGL_PLATFORM)
 			if (g_platformData.type == bgfx::NativeWindowHandleType::Wayland)
