@@ -7,7 +7,7 @@
 
 #if ENTRY_CONFIG_USE_SDL
 
-#if BX_PLATFORM_LINUX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #	if ENTRY_CONFIG_USE_WAYLAND
 #		include <wayland-egl.h>
 #	endif
@@ -48,7 +48,7 @@ namespace entry
 			return NULL;
 		}
 
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 			if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 				{
@@ -81,7 +81,7 @@ namespace entry
 	{
 		if(!_window)
 			return;
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 		wl_egl_window *win_impl = (wl_egl_window*)SDL_GetWindowData(_window, "wl_egl_window");
 		if(win_impl)
@@ -1088,7 +1088,7 @@ namespace entry
 		{
 			return NULL;
 		}
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 			if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 				return wmi.info.wl.display;
@@ -1108,7 +1108,7 @@ namespace entry
 		{
 			return bgfx::NativeWindowHandleType::Default;
 		}
-#	if BX_PLATFORM_LINUX
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #		if ENTRY_CONFIG_USE_WAYLAND
 		if (wmi.subsystem == SDL_SYSWM_WAYLAND)
 		{
