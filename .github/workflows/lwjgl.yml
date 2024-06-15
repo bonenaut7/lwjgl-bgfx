@@ -24,6 +24,7 @@ jobs:
             PLATFORM: x64
             BUILD: x64
             OUTPUT_DIR: win64_vs2022
+            DEFINITIONS: /DBGFX_CONFIG_MULTITHREADED#0 /DBGFX_CONFIG_MAX_FRAME_LATENCY#1
 #          - ARCH: arm64
 #            MSVC_ARCH: amd64_arm64
 #            PLATFORM: arm64
@@ -55,15 +56,15 @@ jobs:
         shell: pwsh
         if: ${{ matrix.ARCH == 'x64' }}
       - name: Build bgfx
-        run: devenv .build\projects\vs2022\bgfx.sln /Project bgfx-shared-lib /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project bgfx-shared-lib /Build "Release|${{matrix.BUILD}}" ${{matrix.DEFINITIONS}}
       - name: Build geometryc
-        run: devenv .build\projects\vs2022\bgfx.sln /Project geometryc /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project geometryc /Build "Release|${{matrix.BUILD}}" ${{matrix.DEFINITIONS}}
       - name: Build texturec
-        run: devenv .build\projects\vs2022\bgfx.sln /Project texturec /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project texturec /Build "Release|${{matrix.BUILD}}" ${{matrix.DEFINITIONS}}
       - name: Build texturev
-        run: devenv .build\projects\vs2022\bgfx.sln /Project texturev /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project texturev /Build "Release|${{matrix.BUILD}}" ${{matrix.DEFINITIONS}}
       - name: Build shaderc
-        run: devenv .build\projects\vs2022\bgfx.sln /Project "shaderc (tools\shaderc\shaderc)" /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project "shaderc (tools\shaderc\shaderc)" /Build "Release|${{matrix.BUILD}}" ${{matrix.DEFINITIONS}}
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
