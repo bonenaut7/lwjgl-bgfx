@@ -51,29 +51,30 @@ jobs:
       - name: Switch to ClangCL for x64 build
         run: |
           (Get-Content .build/projects/vs2022/bgfx-shared-lib.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/bgfx-shared-lib.vcxproj
-          (Get-Content .build/projects/vs2022/geometryc.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/geometryc.vcxproj
-          (Get-Content .build/projects/vs2022/texturec.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/texturec.vcxproj
-          (Get-Content .build/projects/vs2022/texturev.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/texturev.vcxproj
-          (Get-Content .build/projects/vs2022/shaderc.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/shaderc.vcxproj
+#          (Get-Content .build/projects/vs2022/geometryc.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/geometryc.vcxproj
+#          (Get-Content .build/projects/vs2022/texturec.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/texturec.vcxproj
+#          (Get-Content .build/projects/vs2022/texturev.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/texturev.vcxproj
+#          (Get-Content .build/projects/vs2022/shaderc.vcxproj) -replace 'v143', 'ClangCL' | Out-File -encoding UTF8 .build/projects/vs2022/shaderc.vcxproj
         shell: pwsh
         if: ${{ matrix.ARCH == 'x64' }}
       - name: Build bgfx
-        run: devenv .build\projects\vs2022\bgfx.sln /Project bgfx-shared-lib /Build "Release|${{matrix.BUILD}}"
-      - name: Build geometryc
-        run: devenv .build\projects\vs2022\bgfx.sln /Project geometryc /Build "Release|${{matrix.BUILD}}"
-      - name: Build texturec
-        run: devenv .build\projects\vs2022\bgfx.sln /Project texturec /Build "Release|${{matrix.BUILD}}"
-      - name: Build texturev
-        run: devenv .build\projects\vs2022\bgfx.sln /Project texturev /Build "Release|${{matrix.BUILD}}"
-      - name: Build shaderc
-        run: devenv .build\projects\vs2022\bgfx.sln /Project "shaderc (tools\shaderc\shaderc)" /Build "Release|${{matrix.BUILD}}"
+        run: devenv .build\projects\vs2022\bgfx.sln /Project bgfx-shared-lib /Build "Debug|${{matrix.BUILD}}"
+#      - name: Build geometryc
+#         run: devenv .build\projects\vs2022\bgfx.sln /Project geometryc /Build "Release|${{matrix.BUILD}}"
+#       - name: Build texturec
+#         run: devenv .build\projects\vs2022\bgfx.sln /Project texturec /Build "Release|${{matrix.BUILD}}"
+#       - name: Build texturev
+#         run: devenv .build\projects\vs2022\bgfx.sln /Project texturev /Build "Release|${{matrix.BUILD}}"
+#       - name: Build shaderc
+#         run: devenv .build\projects\vs2022\bgfx.sln /Project "shaderc (tools\shaderc\shaderc)" /Build "Release|${{matrix.BUILD}}"
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-without-markdown
           path: |
             .build/${{matrix.OUTPUT_DIR}}/bin/bgfx-shared-libRelease.dll
-            .build/${{matrix.OUTPUT_DIR}}/bin/geometrycRelease.exe
-            .build/${{matrix.OUTPUT_DIR}}/bin/texturecRelease.exe
-            .build/${{matrix.OUTPUT_DIR}}/bin/texturevRelease.exe
-            .build/${{matrix.OUTPUT_DIR}}/bin/shadercRelease.exe
+            .build/${{matrix.OUTPUT_DIR}}/bin/bgfx-shared-libDebug.dll
+#            .build/${{matrix.OUTPUT_DIR}}/bin/geometrycRelease.exe
+#            .build/${{matrix.OUTPUT_DIR}}/bin/texturecRelease.exe
+#            .build/${{matrix.OUTPUT_DIR}}/bin/texturevRelease.exe
+#            .build/${{matrix.OUTPUT_DIR}}/bin/shadercRelease.exe
