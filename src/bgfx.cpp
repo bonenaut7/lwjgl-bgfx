@@ -464,7 +464,24 @@ namespace bgfx
 		}
 		else
 		{
-			g_callback->traceVargs(_filePath, _line, _format, argList);
+			char temp[2048];
+			char* out = temp;
+			va_list argListCopy;
+			va_copy(argListCopy, argList);
+			int32_t len = bx::snprintf(out, sizeof(temp), "%s (%d): ", _filePath, _line);
+			int32_t total = len + bx::vsnprintf(out + len, sizeof(temp) - len, _format, argListCopy);
+			va_end(argListCopy);
+			if ((int32_t)sizeof(temp) < total)
+			{
+				out = (char*)alloca(total + 1);
+				bx::memCopy(out, temp, len);
+				bx::vsnprintf(out + len, total - len, _format, argList);
+			}
+
+			out[total] = '\0';
+
+			//g_callback->traceVargs(_filePath, _line, _format, argList);
+			g_callback->traceVargs(_filePath, _line, out, argList);
 		}
 
 		va_end(argList);
